@@ -198,6 +198,7 @@ public class CameraService: NSObject, Identifiable {
             
             if let backCameraDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) {
                 // If a rear dual camera is not available, default to the rear wide angle camera.
+                backCameraDevice.videoZoomFactor = 2.0
                 defaultVideoDevice = backCameraDevice
             } else if let frontCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
                 // If the rear wide angle camera isn't available, default to the front wide angle camera.
