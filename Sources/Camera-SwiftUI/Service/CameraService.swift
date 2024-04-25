@@ -195,11 +195,11 @@ public class CameraService: NSObject, Identifiable {
         // Add video input.
         do {
             var defaultVideoDevice: AVCaptureDevice?
-            
+            var ultraWide = false
             if let backCameraDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) {
                 // If a rear dual camera is not available, default to the rear wide angle camera.
-                backCameraDevice.videoZoomFactor = 2.0
                 defaultVideoDevice = backCameraDevice
+                ultraWide = true
             } else if let frontCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
                 // If the rear wide angle camera isn't available, default to the front wide angle camera.
                 defaultVideoDevice = frontCameraDevice
@@ -217,7 +217,10 @@ public class CameraService: NSObject, Identifiable {
             if session.canAddInput(videoDeviceInput) {
                 session.addInput(videoDeviceInput)
                 self.videoDeviceInput = videoDeviceInput
-                
+                if ultraWide{
+                    let device = self.videoDeviceInput.device
+                    device.videoZoomFactor = 2.0
+                }
             } else {
                 print("Couldn't add video device input to the session.")
                 setupResult = .configurationFailed
